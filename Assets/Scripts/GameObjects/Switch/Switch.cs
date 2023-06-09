@@ -31,7 +31,7 @@ public class Switch : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision Dect");
+        if(collision.gameObject.tag.Equals("Player"))
         switchDirection = !switchDirection;
         foreach (SwitchButtonObjects objects in objectsToTrigger)
         {

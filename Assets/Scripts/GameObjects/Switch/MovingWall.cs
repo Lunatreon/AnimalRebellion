@@ -10,6 +10,7 @@ public class MovingWall : SwitchButtonObjects
     public override void TriggerChanged(bool switchInput)
     {
         direction = switchInput;
+        shouldMove = true;
     }
 
     private void FixedUpdate()
@@ -18,7 +19,7 @@ public class MovingWall : SwitchButtonObjects
         {
             if (direction)
             {
-                this.gameObject.transform.position = this.gameObject.transform.position + this.Movement * Time.deltaTime;
+                this.gameObject.transform.position = this.gameObject.transform.position - this.Movement * Time.deltaTime;
                 if (gameObject.transform.position.y < -0.5)
                 {
                     double correct = gameObject.transform.position.y + 0.5;

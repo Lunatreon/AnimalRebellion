@@ -79,6 +79,9 @@ public class playerControll : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
+        if (collision.gameObject.tag.Equals("Key"))
+        {
+            collision.gameObject.SetActive(false);    
+        }
     }
 }
