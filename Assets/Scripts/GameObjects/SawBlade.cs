@@ -2,8 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SawBlade : MonoBehaviour
+public class SawBlade : SwitchButtonObjects
 {
+    private bool shouldRotate = true;
+
+    public override void TriggerChanged(bool switchInput)
+    {
+        shouldRotate = !switchInput;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +20,7 @@ public class SawBlade : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.gameObject.transform.Rotate(0, 0, 0.25f);
+        if(shouldRotate)
+            this.gameObject.transform.Rotate(0, 0, 0.5f);
     }
 }

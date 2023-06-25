@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class threadmill : MonoBehaviour
+public class threadmill : SwitchButtonObjects
 {
 
     private List<GameObject> objectsOnTheMill;
 
     [SerializeField]
     private Vector3 millDirection;
+    private bool shouldMove = true;
 
     private void Start()
     {
@@ -17,10 +18,13 @@ public class threadmill : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach(GameObject ob in objectsOnTheMill)
+        if (shouldMove)
         {
-            Vector3 newPosition = ob.transform.position + millDirection * Time.deltaTime;
-            ob.transform.position = newPosition;
+            foreach (GameObject ob in objectsOnTheMill)
+            {
+                Vector3 newPosition = ob.transform.position + millDirection * Time.deltaTime;
+                ob.transform.position = newPosition;
+            }
         }
     }
 
@@ -37,5 +41,10 @@ public class threadmill : MonoBehaviour
         {
             rb.AddForce(millDirection);
         }
+    }
+
+    public override void TriggerChanged(bool switchInput)
+    {
+        shouldMove = !switchInput;
     }
 }
