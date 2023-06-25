@@ -42,7 +42,6 @@ public class threadmill : SwitchButtonObjects
             rb.AddForce(millDirection);
         }
     }
-
     public override void TriggerChanged(bool switchInput)
     {
         shouldMove = !switchInput;
