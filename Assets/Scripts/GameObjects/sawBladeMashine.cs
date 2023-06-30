@@ -10,6 +10,8 @@ public class sawBladeMashine : SwitchButtonObjects
     private Vector3 spawnPointForInput;
     [SerializeField]
     private VisualEffect bloodEffect;
+    [SerializeField]
+    private VisualEffect smokeEffect;
 
     private List<SwitchButtonObjects> objectsToTriggerOnEvent;
 
@@ -27,6 +29,9 @@ public class sawBladeMashine : SwitchButtonObjects
         objectsToTriggerOnEvent = new List<SwitchButtonObjects>(this.gameObject.GetComponentsInChildren<SwitchButtonObjects>());
 
         objectsToTriggerOnEvent.Remove(this);
+
+        smokeEffect.Stop();
+        bloodEffect.Play();
     }
 
     /*
@@ -56,6 +61,7 @@ public class sawBladeMashine : SwitchButtonObjects
 
         } else if (collision.gameObject.tag.Equals("box"))
         {
+            smokeEffect.Play();
             TriggerChanged(true);
         }
     }

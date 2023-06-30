@@ -7,14 +7,15 @@ TagManager:
   - Key
   - chickenThreadmile
   - box
+  - Event
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Envionment
   - 
   - 
   - 
@@ -43,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 3768405107
+    locked: 0
+  - name: Envionmeny
+    uniqueID: 588096599
     locked: 0

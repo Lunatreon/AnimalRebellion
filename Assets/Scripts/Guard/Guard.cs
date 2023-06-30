@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,12 @@ public class Guard : MonoBehaviour
         ChasePosition,
         ReturnToPatrol
     }
+
+    [Tooltip("Default Idle Time the Guard check a area if not defined by the waypoint (or is 0)")]
+    [SerializeField] private float idleTime;
+
+    [Tooltip("The Text which should show if the Guard had seen the player or heard something")]
+    [SerializeField] private TextMeshProUGUI textToShowStatus;
 
     [Header("Patrol")]
     [Tooltip("The patrol route of the guard. they will always start at position 0")]
@@ -28,8 +35,8 @@ public class Guard : MonoBehaviour
     [Tooltip("Time the player has to be seen by the guard, until the chase begin")]
     [SerializeField] private float chaseThreshhold = 1f;
     [SerializeField] private float chaseSpeed;
-    private float currentInterest;
-    private float decayStartTimer;
+    private float currentInterest = 0;
+    private float decayStartTimer = 0;
 
     /*
     * Logic variable to store needed data and used by more than one state
@@ -70,6 +77,7 @@ public class Guard : MonoBehaviour
         guardAnimator = gameObject.GetComponentInChildren<Animator>();
         agent = gameObject.GetComponent<NavMeshAgent>();
         State = GuardState.Patrol;
+        textToShowStatus.text = "";
     }
 
     private void Update()
@@ -79,6 +87,27 @@ public class Guard : MonoBehaviour
         if (decayStartTimer <= 0 && currentInterest > 0 && State != GuardState.ChasePosition)
         {
             currentInterest -= Time.deltaTime;
+        }
+        if (currentInterest <= 0 && state != GuardState.ChasePosition && state != GuardState.CheckPosition)
+        {
+            textToShowStatus.text = "";
+        }
+        else if (currentInterest <= 0 && state == GuardState.CheckPosition)
+        {
+            textToShowStatus.text = "?";
+            textToShowStatus.color = Color.yellow;
+        }
+
+        if (currentInterest > 0)
+        {
+            textToShowStatus.text = "?";
+            textToShowStatus.color = Color.yellow;
+            
+        }
+        if (currentInterest > chaseThreshhold)
+        {
+            textToShowStatus.text = "!";
+            textToShowStatus.color = Color.red;
         }
     }
 
@@ -116,6 +145,7 @@ public class Guard : MonoBehaviour
             //if arrived at destination returnToPatrol;
             if (ArrivedAtDestination())
             {
+                yield return new WaitForSeconds(idleTime);
                 State = GuardState.ReturnToPatrol;
             }
             yield return null;
@@ -157,7 +187,7 @@ public class Guard : MonoBehaviour
         {
             if (ArrivedAtDestination())
             {
-                yield return new WaitForSeconds( PatrolRoute[patrolNumber].idleTimeOnCheckpointReached);
+                yield return new WaitForSeconds(PatrolRoute[patrolNumber].idleTimeOnCheckpointReached > 0 ? PatrolRoute[patrolNumber].idleTimeOnCheckpointReached : idleTime);
                 patrolNumber = (patrolNumber + 1) % PatrolRoute.Length;
                 agent.SetDestination(PatrolRoute[patrolNumber].transform.position);
             }
