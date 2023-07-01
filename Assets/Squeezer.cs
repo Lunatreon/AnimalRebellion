@@ -13,6 +13,9 @@ public class Squeezer : SwitchButtonObjects
     private GameObject SqueezerRight;
     private Vector3 startPosRight;
 
+    [SerializeField]
+    private GameObject eventObject;
+
     private bool shouldSqueeze = false;
 
     private bool shouldReturnToPosition = false;
@@ -29,10 +32,12 @@ public class Squeezer : SwitchButtonObjects
     public override void TriggerChanged(bool switchInput)
     {
         shouldRun = !switchInput;
+        eventObject.SetActive(switchInput);
 
-        if(!shouldReturnToPosition && !shouldSqueeze)
+        if (!shouldReturnToPosition && !shouldSqueeze)
         {
             hock.changeMovement(shouldRun);
+
         }
     }
 
@@ -41,6 +46,8 @@ public class Squeezer : SwitchButtonObjects
     {
         startPosLeft = SqueezerLeft.transform.position;
         startPosRight = SqueezerRight.transform.position;
+
+        eventObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -69,29 +76,29 @@ public class Squeezer : SwitchButtonObjects
                 }
                 else
                 {
-                    
                     Vector3 movement = startPosLeft - startPosRight;
 
                     SqueezerLeft.transform.position = SqueezerLeft.transform.position - movement * Time.fixedDeltaTime * 3;
                     SqueezerRight.transform.position = SqueezerRight.transform.position + movement * Time.fixedDeltaTime * 3;
                 }
             }
-            else if (shouldReturnToPosition)
+        }
+        if (shouldReturnToPosition)
+        {
+            Vector3 movementLeft = startPosLeft - SqueezerLeft.transform.position;
+            SqueezerLeft.transform.position = SqueezerLeft.transform.position + movementLeft * Time.fixedDeltaTime * 2;
+
+            Vector3 movementRight = startPosRight - SqueezerRight.transform.position;
+            SqueezerRight.transform.position = SqueezerRight.transform.position + movementRight * Time.fixedDeltaTime * 2;
+
+            if (movementRight.magnitude < 0.3 && movementLeft.magnitude < 0.3)
             {
-                Vector3 movementLeft = startPosLeft - SqueezerLeft.transform.position;
-                SqueezerLeft.transform.position = SqueezerLeft.transform.position + movementLeft * Time.fixedDeltaTime * 2;
-
-                Vector3 movementRight = startPosRight - SqueezerRight.transform.position;
-                SqueezerRight.transform.position = SqueezerRight.transform.position + movementRight * Time.fixedDeltaTime * 2;
-
-                if (movementRight.magnitude < 0.3 && movementLeft.magnitude < 0.3)
-                {
+                if(shouldRun)
                     hock.changeMovement(true);
-                }
-                else if (movementRight.magnitude < 0.01 && movementLeft.magnitude < 0.01)
-                {
-                    shouldReturnToPosition = false;
-                }
+            }
+            else if (movementRight.magnitude < 0.01 && movementLeft.magnitude < 0.01)
+            {
+                shouldReturnToPosition = false;
             }
         }
 
@@ -110,7 +117,14 @@ public class Squeezer : SwitchButtonObjects
 
     private void OnTriggerStay(Collider other)
     {
-        
+        if (shouldSqueeze)
+        {
+            if (other.tag.Equals("Guard"))
+            {
+                other.gameObject.SetActive(false);
+            }
+
+        }
     }
 
 

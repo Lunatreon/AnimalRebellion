@@ -32,12 +32,14 @@ public class FieldOfViews : MonoBehaviour
         CheckIfReact(other);
         if (other.gameObject.CompareTag("Event"))
         {
-            guard.EventInRange(other.transform.position);
+           
+            guard.EventInRange(other.transform);
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
+
         CheckIfReact(other);
     }
 

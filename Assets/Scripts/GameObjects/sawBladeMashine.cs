@@ -21,6 +21,11 @@ public class sawBladeMashine : SwitchButtonObjects
     private Vector3 spawnPointForOutput;
 
 
+    [SerializeField]
+    private GameObject keyToThrew;
+    [SerializeField]
+    private Vector3 forceDirection;
+
     /*
      * create the list of Objects connectet with the mashine (their child objects with SwitchButtonObjects childs)
      */
@@ -32,6 +37,8 @@ public class sawBladeMashine : SwitchButtonObjects
 
         smokeEffect.Stop();
         bloodEffect.Play();
+
+        keyToThrew.SetActive(false);
     }
 
     /*
@@ -39,7 +46,8 @@ public class sawBladeMashine : SwitchButtonObjects
      */
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(other.gameObject);
+        if(other.gameObject.tag.Equals("Food"))
+            Destroy(other.gameObject);
     }
 
     /*
@@ -57,12 +65,16 @@ public class sawBladeMashine : SwitchButtonObjects
 
        
             GameObject obj = Instantiate(output, spawnPointForOutput, Quaternion.identity);
+            obj.transform.parent = this.gameObject.transform;
             obj.SetActive(true);
 
-        } else if (collision.gameObject.tag.Equals("box"))
+        } else if (collision.gameObject.tag.Equals("Chest"))
         {
             smokeEffect.Play();
             TriggerChanged(true);
+            collision.gameObject.SetActive(false);
+            keyToThrew.SetActive(true);
+            keyToThrew.GetComponent<Rigidbody>().AddForce(forceDirection);
         }
     }
 

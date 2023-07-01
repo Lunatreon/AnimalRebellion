@@ -81,7 +81,11 @@ public class playerControll : MonoBehaviour
     {
         if (collision.gameObject.tag.Equals("Key"))
         {
-            collision.gameObject.SetActive(false);    
+            collision.gameObject.SetActive(false);
+            GameManagerSlaugtherhouse.PublicGameManager.playerGotKey();
+        }else if (collision.gameObject.tag.Equals("Target"))
+        {
+            GameManagerSlaugtherhouse.PublicGameManager.playerGotChickenMother();
         }
     }
 }

@@ -38,6 +38,8 @@ public class Guard : MonoBehaviour
     private float currentInterest = 0;
     private float decayStartTimer = 0;
 
+    [Header("Reaction")]
+    [SerializeField] private Canvas response;
     /*
     * Logic variable to store needed data and used by more than one state
     */
@@ -82,6 +84,10 @@ public class Guard : MonoBehaviour
 
     private void Update()
     {
+        guardAnimator.SetFloat("Walkspeed", agent.velocity.magnitude);
+        guardAnimator.speed = agent.velocity.magnitude/2;
+        response.transform.LookAt(Camera.main.transform);
+
         decayStartTimer -= Time.deltaTime;
 
         if (decayStartTimer <= 0 && currentInterest > 0 && State != GuardState.ChasePosition)
@@ -219,9 +225,11 @@ public class Guard : MonoBehaviour
         return agent.remainingDistance < 0.1f && !agent.pathPending;
     }
 
-    public void EventInRange(Vector3 position)
+    public void EventInRange(Transform transform)
     {
-        targetPosition = position;
+        targetPosition = transform.position;
+        lastPatrolPosition = transform.position;
+        lastPatrolRotation = transform.rotation;
         State = GuardState.CheckPosition;
     }
 }

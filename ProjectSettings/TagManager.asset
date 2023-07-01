@@ -6,8 +6,12 @@ TagManager:
   tags:
   - Key
   - chickenThreadmile
-  - box
   - Event
+  - AnimalInSlaugtherhouse
+  - Chest
+  - Guard
+  - Food
+  - Target
   layers:
   - Default
   - TransparentFX
