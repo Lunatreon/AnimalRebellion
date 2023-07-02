@@ -4,21 +4,15 @@ using UnityEngine;
 
 public class playerControll : MonoBehaviour
 {
-    // Start is called before the first frame update
+    
     private Animator animator;
     public Camera cam;
     private Rigidbody myRigibody;
 
-    private bool air;
-
-    private float sphereRadius = 1;
-    private float raycastOffset = 0.1f;
-
+    //manage the input 
     private Vector3 force;
-
-
-    private Vector3 spawnPoint;
-
+    
+    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -41,25 +35,19 @@ public class playerControll : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         { 
-            force *= 100;
+
+            force = 100 * force.normalized;
             animator.SetBool("Run", true);
             animator.SetBool("Walk", false);
         }
         else
         {
-           force *= 50;
+           force = 50 * force.normalized;
             animator.SetBool("Walk", true);
             animator.SetBool("Run", false);
         }
 
-        RaycastHit hit;
-        air = Physics.SphereCast(transform.position + Vector3.up * (sphereRadius + Physics.defaultContactOffset),
-            sphereRadius - Physics.defaultContactOffset
-            , Vector3.down, out hit, raycastOffset);
-        //animator.SetBool("Grounded", air);
-
-
-        //evtl noch die physikalischen kollisionen mit einbeziehen
+        //using the force of unity to interact better with physic objects
         if (force.magnitude != 0)
         {
             Vector3 actForce = new Vector3(0, myRigibody.velocity.y, 0);
@@ -67,8 +55,6 @@ public class playerControll : MonoBehaviour
             force = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0) * force;
             myRigibody.AddForce(force);
             transform.rotation = Quaternion.LookRotation(force);
-            //animator.SetFloat("Speed", animatonSpeed);
-            force = new Vector3(0, 0, 0);
         }
         else
         {
@@ -77,6 +63,9 @@ public class playerControll : MonoBehaviour
         }
     }
 
+    /*
+     * check which object is collided with our chicken :)
+     */
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag.Equals("Key"))

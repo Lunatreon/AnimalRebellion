@@ -94,6 +94,7 @@ public class Guard : MonoBehaviour
         {
             currentInterest -= Time.deltaTime;
         }
+        //manage the information for the player (? the guard had notice you ! the guard will hunt you)
         if (currentInterest <= 0 && state != GuardState.ChasePosition && state != GuardState.CheckPosition)
         {
             textToShowStatus.text = "";
@@ -139,6 +140,9 @@ public class Guard : MonoBehaviour
         }
     }
 
+    /*
+     * check position state. Guard should check a given position or update it. if the guard arrived at the destination and nobody is the he will return to the patrol
+     */
     private IEnumerator CheckPosition()
     {
         agent.SetDestination(targetPosition);
@@ -158,6 +162,9 @@ public class Guard : MonoBehaviour
         }
     }
 
+    /*
+     * Guard has seen player and chase them until he is not be seen anymore
+     */
     private IEnumerator ChasePosition()
     {
         //When entering the State
@@ -177,6 +184,9 @@ public class Guard : MonoBehaviour
         }
     }
 
+    /*
+     * patrol between given points
+     */
     private IEnumerator Patrol()
     {
         if(PatrolRoute.Length == 0)
@@ -205,6 +215,9 @@ public class Guard : MonoBehaviour
         lastPatrolRotation = transform.rotation;
     }
 
+    /*
+     * if the guard has seen the player
+     */
     public void PlayerInView(Vector3 position)
     {
         targetPosition = position;
@@ -216,15 +229,25 @@ public class Guard : MonoBehaviour
         decayStartTimer = timeUntilInterestDecays;
     }
     
+    /*
+     * update position if the target position don't match the destination
+     */
     private void UpdateDestinationIfNew()
     {
         if (targetPosition != agent.destination) agent.SetDestination(targetPosition);
     }
+
+    /*
+     * check if guard arrived at destination
+     */
     private bool ArrivedAtDestination()
     {
         return agent.remainingDistance < 0.1f && !agent.pathPending;
     }
 
+    /*
+     * if something interesting accured in the range of the guard
+     */
     public void EventInRange(Transform transform)
     {
         targetPosition = transform.position;

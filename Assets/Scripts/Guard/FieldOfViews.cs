@@ -12,14 +12,14 @@ public class FieldOfViews : MonoBehaviour
     [SerializeField] private float viewRange;
 
     [Tooltip("The Angle the enemy can look")]
-    public int viewAreaAngle;
+    [SerializeField] private int viewAreaAngle;
 
     [Tooltip("The direction the enemy is looking")]
-    public Transform viewDirection;
+    [SerializeField] private Transform viewDirection;
 
     [Tooltip("Layers of the objects which are important to interact with the world, that aren't see throw")]
-    public LayerMask layerMask;
-    public Guard guard;
+    [SerializeField] private LayerMask layerMask;
+    [SerializeField] private  Guard guard;
 
     void Start()
     {
