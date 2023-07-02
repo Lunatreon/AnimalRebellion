@@ -8,6 +8,14 @@ using UnityEngine.SceneManagement;
  */
 public class UIManager : MonoBehaviour
 {
+    /*
+     * set the timeScale to 1 to resume all animations and logic
+     */
+    private void Start()
+    {
+        Hock.changeMovement(true);
+        Time.timeScale = 1;
+    }
     public void MainMenu()
     {
         SceneManager.LoadScene("MainMenu");

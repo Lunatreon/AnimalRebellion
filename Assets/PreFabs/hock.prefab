@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8825159954881821251}
   - component: {fileID: 8825159954881821250}
   m_Layer: 0
-  m_Name: hock
+  m_Name: Hock
   m_TagString: AnimalInSlaugtherhouse
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
